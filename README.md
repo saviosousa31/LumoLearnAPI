@@ -1,4 +1,7 @@
-# LumoLearn 🎮📚
+# LumoLearn API 🎮📚
+_Este repositório contém o código-fonte da API RESTful para um aplicativo de Quiz desenvolvido em Java._
+
+
 
 **LumoLearn** é uma aplicação de Quiz desenvolvida em Java, utilizando o **Spring Framework** e um banco de dados MySQL. O projeto tem como **objetivo** criar uma plataforma de **aprendizado** onde os usuários podem **criar** Cursos, Temas e Questões **personalizadas**, jogar quizzes de maneira individual e acompanhar seu desempenho. A solução será escalável e modular, com planos para integrar Inteligência Artificial para geração automática de questões e futuras funcionalidades de interação social, como desafios entre amigos. 🤖🎓
 
