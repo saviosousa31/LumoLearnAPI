@@ -25,13 +25,18 @@ public class SubjectController {
 	private SubjectService subjectService;
 	
 	@GetMapping
-	public Iterable<Subject> getAllSubjects(){
-		return subjectService.getAllSubjects();
+	public Iterable<Subject> getAllSubjects(@RequestParam (required=false) Integer page, Integer per_page){
+		return subjectService.getAllSubjects(page, per_page);
 	}
 	
 	@GetMapping("/search")
 	public Optional<Subject> getSubject(@RequestParam (required=false) Long id, String description){
 		return subjectService.findSubject(id, description);
+	}
+	
+	@GetMapping("/search/course")
+	public Iterable<Subject> getSubjectsByCourseId(@RequestParam (required=true) Long courseId){
+		return subjectService.findSubjectsByCourseId(courseId);
 	}
 	
 	@RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT})

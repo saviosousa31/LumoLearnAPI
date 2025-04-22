@@ -25,8 +25,8 @@ public class UserController {
 	private UserService userService;
 	
 	@GetMapping
-	public Iterable<User> getAllUsers() {
-		return userService.getAllUsers();
+	public Iterable<User> getAllUsers(@RequestParam (required=false) Integer page, Integer per_page) {
+		return userService.getAllUsers(page, per_page);
 	}
 		
 	@GetMapping("/search")

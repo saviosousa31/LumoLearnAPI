@@ -25,13 +25,13 @@ public class CourseController {
 	private CourseService courseService;
 	
 	@GetMapping
-	public Iterable<Course> getAllCourses(){
-		return courseService.getAllCourses();
+	public Iterable<Course> getAllCourses(@RequestParam (required=false) Integer page, Integer per_page){
+		return courseService.getAllCourses(page, per_page);
 	}
 	
 	@GetMapping("/search")
-	public Optional<Course> getCourse(@RequestParam (required=false) Long id, String description){
-		return courseService.findCourse(id, description);
+	public Optional<Course> getCourse(@RequestParam (required=false) Long id, String name){
+		return courseService.findCourse(id, name);
 	}
 
 	@RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT})

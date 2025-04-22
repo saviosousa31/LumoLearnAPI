@@ -19,7 +19,7 @@ public class LumoLearnApiApplication {
         DatabaseService databaseService = context.getBean(DatabaseService.class);
 
         // Testa a conexão
-        try (Connection conexao = databaseService.getConnection()) {
+        try (Connection connection = databaseService.getConnection()) {
             System.out.println("✅ Conexão efetuada com sucesso!");
         } catch (Exception e) {
             System.err.println("❌ Erro ao conectar ao banco de dados!");

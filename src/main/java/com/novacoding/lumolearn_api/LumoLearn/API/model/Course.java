@@ -3,9 +3,12 @@ package com.novacoding.lumolearn_api.LumoLearn.API.model;
 import java.util.Date;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -29,8 +32,17 @@ public class Course {
 	@NotBlank
 	private String description;
 	@NotNull
-	private int user_id;
+	private Long user_id;
 	@NotNull
-	private int author_id; 
+	private Long author_id; 
 	private Date creation_date;
+	
+	@ManyToOne(fetch = FetchType.EAGER)           // EAGER para garantir que venha sempre
+    @JoinColumn(
+      name = "author_id",                         // FK na tabela tb_courses
+      referencedColumnName = "id",                // PK de tb_users
+      insertable = false,                         // para não duplicar coluna
+      updatable = false
+    ) 
+	private User author;
 }

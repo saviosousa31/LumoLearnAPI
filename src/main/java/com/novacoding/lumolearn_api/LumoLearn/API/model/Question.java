@@ -12,7 +12,7 @@ public class Question {
 	private Long id;
 	private String description;
 	private String explanation;
-	private int subject_id;
+	private Long subject_id;
 	private int difficulty_level;
-	private int author_id;	
+	private Long author_id;	
 }

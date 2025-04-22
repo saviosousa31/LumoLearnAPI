@@ -27,5 +27,5 @@ public class Subject {
 	@NotBlank
 	private String description;
 	@NotNull
-	private int course_id;
+	private Long course_id;
 }
