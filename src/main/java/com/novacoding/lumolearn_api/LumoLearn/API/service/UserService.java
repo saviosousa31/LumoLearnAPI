@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.novacoding.lumolearn_api.LumoLearn.API.model.User;
@@ -18,6 +19,8 @@ public class UserService {
 	private UserRepository userRepository;
 	@Autowired
 	UserSettingsRepository userSettingsRepository;
+	@Autowired
+	private PasswordEncoder encoder;
 
 	public Iterable<User> getAllUsers(Integer page, Integer per_page) {		
 		int pageNumber = (page != null) ? page : 0;
@@ -35,6 +38,8 @@ public class UserService {
 	}
 	
 	public User saveUser(User user) {
+		String pass = user.getPassword();
+		user.setPassword(encoder.encode(pass));
 		// Primeiro, salva o User
 		User savedUser = userRepository.save(user);
 
