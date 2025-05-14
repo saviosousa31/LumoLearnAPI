@@ -34,6 +34,7 @@ _Este repositório contém o código-fonte da API RESTful para um aplicativo de 
   - Maven
   - JUnit (Testes Unitários)
   - JPA e Hibernate
+  - JWT
 
 - **Banco de Dados**:
   - MySQL (Inicialmente)
