@@ -2,6 +2,8 @@ package com.novacoding.lumolearn_api.LumoLearn.API.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -44,5 +46,10 @@ public class Course {
       insertable = false,                         // para não duplicar coluna
       updatable = false
     ) 
+	@JsonIgnoreProperties({ 
+	      "password", "email", "phone_number", "play_streak", 
+	      "total_xp", "total_coins", "email_verified", 
+	      "phone_number_verified", "user_settings" 
+	    })
 	private User author;
 }

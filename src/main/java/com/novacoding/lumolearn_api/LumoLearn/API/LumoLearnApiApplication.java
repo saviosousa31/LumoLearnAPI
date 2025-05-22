@@ -8,7 +8,16 @@ import org.springframework.context.ApplicationContext;
 
 import com.novacoding.lumolearn_api.LumoLearn.API.service.DatabaseService;
 
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+
 @SpringBootApplication
+@SecurityScheme(
+		  name = "bearerAuth",
+		  type = SecuritySchemeType.HTTP,
+		  scheme = "bearer",
+		  bearerFormat = "JWT"
+		)
 public class LumoLearnApiApplication {
 
     public static void main(String[] args) {

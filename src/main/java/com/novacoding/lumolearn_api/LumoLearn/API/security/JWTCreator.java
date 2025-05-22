@@ -12,35 +12,45 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 
+//JWTCreator.java
 public class JWTCreator {
-	public static final String HEADER_AUTHORIZATION = "Authorization";
-    public static final String ROLES_AUTHORITIES = "authorities";
+ public static final String HEADER_AUTHORIZATION = "Authorization";
+ private static final String ROLES = "authorities";
 
-    public static String create(String prefix, Key key, JWTObject jwtObject) {
-        String token = Jwts.builder()
-                .setSubject(jwtObject.getSubject())
-                .setIssuedAt(jwtObject.getIssuedAt())
-                .setExpiration(jwtObject.getExpiration())
-                .claim(ROLES_AUTHORITIES, checkRoles(jwtObject.getRoles()))
-                .signWith(key, SignatureAlgorithm.HS512)    // <-- repare na ordem e no tipo
-                .compact();
+ // 1) geração
+ public static String generateToken(String prefix, Key key, JWTObject obj) {
+     if (obj.getSubject() == null) {
+         throw new IllegalArgumentException("subject não pode ser nulo");
+     }
+     String jwt = Jwts.builder()
+         .setSubject(obj.getSubject())
+         .setIssuedAt(obj.getIssuedAt())
+         .setExpiration(obj.getExpiration())
+         .claim(ROLES, obj.getRoles())
+         .signWith(key, SignatureAlgorithm.HS512)
+         .compact();
+     return prefix + " " + jwt;
+ }
 
-        return prefix + " " + token;
-    }
-    
-    public static JWTObject create(String token,String prefix,Key key)
-            throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException {
-        JWTObject object = new JWTObject();
-        token = token.replace(prefix, "");
-        Claims claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
-        object.setSubject(claims.getSubject());
-        object.setExpiration(claims.getExpiration());
-        object.setIssuedAt(claims.getIssuedAt());
-        object.setRoles((List) claims.get(ROLES_AUTHORITIES));
-        return object;
+ // 2) parsing
+ public static JWTObject parseToken(String header, String prefix, Key key)
+         throws ExpiredJwtException, UnsupportedJwtException,
+                MalformedJwtException, SignatureException {
 
-    }
-    private static List<String> checkRoles(List<String> roles) {
-        return roles.stream().map(s -> "ROLE_".concat(s.replaceAll("ROLE_",""))).collect(Collectors.toList());
-    }
+     if (header == null) {
+         throw new IllegalArgumentException("header inválido");
+     }
+     Claims claims = Jwts.parser()
+                         .setSigningKey(key)
+                         .parseClaimsJws(header)
+                         .getBody();
+
+     JWTObject obj = new JWTObject();
+     obj.setSubject(claims.getSubject());      // agora não será null
+     obj.setIssuedAt(claims.getIssuedAt());
+     obj.setExpiration(claims.getExpiration());     
+     List<String> roles = (List<String>) claims.get("authorities");
+     obj.setRoles(roles);
+     return obj;
+ }
 }

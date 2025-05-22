@@ -10,9 +10,9 @@ public class JWTObject {
 	private Date issuedAt;
 	private Date expiration;
 	private List<String> roles;
-	
-	private void setRoles(String... roles){
-		this.roles = Arrays.asList(roles);
+
+	public void setRoles(List<String> roles) { 
+		this.roles = roles; 
 	}
 
 	public String getSubject() {
@@ -41,11 +41,7 @@ public class JWTObject {
 
 	public List<String> getRoles() {
 		return roles;
-	}
-
-	public void setRoles(List<String> roles) {
-		this.roles = roles;
-	}
+	} 
 	
 	
 }

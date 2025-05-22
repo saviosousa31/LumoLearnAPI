@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.novacoding.lumolearn_api.LumoLearn.API.model.User;
 import com.novacoding.lumolearn_api.LumoLearn.API.service.UserService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
 @RestController
+@SecurityRequirement(name = "bearerAuth")
 @RequestMapping("/api/users")
 public class UserController {
 
@@ -25,8 +27,9 @@ public class UserController {
 	private UserService userService;
 	
 	@GetMapping
-	public Iterable<User> getAllUsers(@RequestParam (required=false) Integer page, Integer per_page) {
-		return userService.getAllUsers(page, per_page);
+	public Iterable<User> getAllUsers(@RequestParam (required=false) Integer page, 
+									  @RequestParam (required=false) Integer per_page) {
+	    return userService.getAllUsers(page, per_page); 
 	}
 		
 	@GetMapping("/search")

@@ -2,16 +2,16 @@ package com.novacoding.lumolearn_api.LumoLearn.API.security;
 
 import java.io.IOException;
 import java.security.Key;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.novacoding.lumolearn_api.LumoLearn.API.config.SecurityDatabaseService;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -27,39 +27,47 @@ public class JWTFilter extends OncePerRequestFilter {
 
   @Autowired
   private Key jwtSigningKey;
-	  
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-        //obtem o token da request com AUTHORIZATION
-        String token =  request.getHeader(JWTCreator.HEADER_AUTHORIZATION);
-        //esta implementação só esta validando a integridade do token
-        try {
-            if(token!=null && !token.isEmpty()) {
-                JWTObject tokenObject = JWTCreator.create(token,SecurityConfig.PREFIX, jwtSigningKey);
 
-                List<SimpleGrantedAuthority> authorities = authorities(tokenObject.getRoles());
+  // injete seu Service que implementa UserDetailsService:
+  @Autowired
+  private SecurityDatabaseService userDetailsService;
 
-                UsernamePasswordAuthenticationToken userToken =
-                        new UsernamePasswordAuthenticationToken(
-                                tokenObject.getSubject(),
-                                null,
-                                authorities);
+  @Override
+  protected void doFilterInternal(HttpServletRequest request,
+                                  HttpServletResponse response,
+                                  FilterChain filterChain)
+        throws ServletException, IOException {
 
-                SecurityContextHolder.getContext().setAuthentication(userToken);
+    String header = request.getHeader(JWTCreator.HEADER_AUTHORIZATION);
+    if (header != null && header.startsWith(SecurityConfig.PREFIX)) {
+      try {
+    	String jwt = header.substring(SecurityConfig.PREFIX.length()).trim();
+        
+    	JWTObject tokenObject = JWTCreator.parseToken(jwt, SecurityConfig.PREFIX, jwtSigningKey);
 
-            }else {
-                SecurityContextHolder.clearContext();
-            }
-            filterChain.doFilter(request, response);
-        }catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException e) {
-            e.printStackTrace();
-            response.setStatus(HttpStatus.FORBIDDEN.value());
-            return;
-        }
+        // Recarrega o usuário do banco:
+        UserDetails userDetails = userDetailsService
+                                    .loadUserByUsername(tokenObject.getSubject());
+
+        // Cria o Authentication com *todas* as authorities:
+        UsernamePasswordAuthenticationToken auth =
+            new UsernamePasswordAuthenticationToken(
+                userDetails,
+                null,
+                userDetails.getAuthorities()
+            );
+
+        SecurityContextHolder.getContext().setAuthentication(auth);
+
+      } catch (ExpiredJwtException | UnsupportedJwtException |
+               MalformedJwtException | SignatureException e) {
+        response.setStatus(HttpStatus.FORBIDDEN.value());
+        return;
+      }
+    } else {
+      SecurityContextHolder.clearContext();
     }
-    private List<SimpleGrantedAuthority> authorities(List<String> roles){
-        return roles.stream().map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
-    }
+
+    filterChain.doFilter(request, response);
+  }
 }
