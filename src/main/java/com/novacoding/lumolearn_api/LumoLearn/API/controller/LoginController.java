@@ -47,9 +47,9 @@ public class LoginController {
         Session session = new Session();
         session.setLogin(user.getUsername());
 
-        // 3) Cria o JWTObject e PIENE TODOS os campos
+        // 3) Cria o JWTObject e preenche TODOS os campos
         JWTObject jwtObject = new JWTObject();
-        jwtObject.setSubject(user.getUsername());               // **NÃO** esqueça do subject!
+        jwtObject.setSubject(user.getUsername());               
         jwtObject.setIssuedAt(new Date(System.currentTimeMillis()));
         jwtObject.setExpiration(new Date(System.currentTimeMillis() + SecurityConfig.EXPIRATION));
 

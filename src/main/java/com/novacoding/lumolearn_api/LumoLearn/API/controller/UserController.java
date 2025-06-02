@@ -33,7 +33,8 @@ public class UserController {
 	}
 		
 	@GetMapping("/search")
-	public Optional<User> getUser(@RequestParam (required=false) Long id, String username) {
+	public Optional<User> getUser(@RequestParam (required=false) Long id,
+								  @RequestParam (required=false) String username) {
 		return userService.findUser(id, username);
 	}
 

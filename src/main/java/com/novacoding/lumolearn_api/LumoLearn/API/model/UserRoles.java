@@ -1,6 +1,6 @@
 package com.novacoding.lumolearn_api.LumoLearn.API.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,6 +28,25 @@ public class UserRoles {
 
     @ManyToOne
 	@JoinColumn(name="user_id", referencedColumnName = "id", unique=true)
-	@JsonBackReference
     private User user;
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UserRoles other = (UserRoles) obj;
+		return Objects.equals(role_name, other.role_name) && Objects.equals(user, other.user)
+				&& Objects.equals(user_id, other.user_id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(role_name, user, user_id);
+	}
+    
+    
 }

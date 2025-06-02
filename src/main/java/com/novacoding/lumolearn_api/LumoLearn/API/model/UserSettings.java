@@ -1,5 +1,7 @@
 package com.novacoding.lumolearn_api.LumoLearn.API.model;
 
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Entity;
@@ -33,4 +35,23 @@ public class UserSettings {
 	@JoinColumn(name="user_id", referencedColumnName = "id", unique=true)
 	@JsonBackReference
 	private User user;
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UserSettings other = (UserSettings) obj;
+		return Objects.equals(id, other.id) && Objects.equals(user, other.user);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, user);
+	}
+	
+	
 }

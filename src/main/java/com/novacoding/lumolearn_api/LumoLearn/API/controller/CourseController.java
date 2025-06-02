@@ -33,7 +33,8 @@ public class CourseController {
 	}
 	
 	@GetMapping("/search")
-	public Optional<Course> getCourse(@RequestParam (required=false) Long id, String name){
+	public Optional<Course> getCourse(@RequestParam (required=false) Long id, 
+									  @RequestParam (required=false) String name){
 		return courseService.findCourse(id, name);
 	}
 

@@ -2,6 +2,7 @@ package com.novacoding.lumolearn_api.LumoLearn.API.model;
 
 import java.sql.Blob;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -53,5 +54,26 @@ public class User {
 	private UserSettings user_settings;
 	
 	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private Set<UserRoles> roles = new HashSet<>();
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		return Objects.equals(id, other.id) && Objects.equals(password, other.password)
+				&& Objects.equals(username, other.username);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, password, username);
+	}
+	
+	
 }

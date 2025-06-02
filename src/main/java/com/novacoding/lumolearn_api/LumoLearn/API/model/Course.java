@@ -49,7 +49,7 @@ public class Course {
 	@JsonIgnoreProperties({ 
 	      "password", "email", "phone_number", "play_streak", 
 	      "total_xp", "total_coins", "email_verified", 
-	      "phone_number_verified", "user_settings" 
+	      "phone_number_verified", "user_settings", "roles" 
 	    })
 	private User author;
 }
