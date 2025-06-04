@@ -33,7 +33,8 @@ public class SubjectController {
 	}
 	
 	@GetMapping("/search")
-	public Optional<Subject> getSubject(@RequestParam (required=false) Long id, String description){
+	public Optional<Subject> getSubject(@RequestParam (required=false) Long id,
+										@RequestParam (required=false) String description){
 		return subjectService.findSubject(id, description);
 	}
 	

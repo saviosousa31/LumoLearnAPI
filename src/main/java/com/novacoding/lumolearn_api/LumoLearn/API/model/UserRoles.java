@@ -2,6 +2,8 @@ package com.novacoding.lumolearn_api.LumoLearn.API.model;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -28,6 +30,7 @@ public class UserRoles {
 
     @ManyToOne
 	@JoinColumn(name="user_id", referencedColumnName = "id", unique=true)
+    @JsonBackReference
     private User user;
 
 	@Override
