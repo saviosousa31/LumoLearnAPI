@@ -33,8 +33,8 @@ public class QuestionController {
 	
 	@GetMapping("/search")
 	public Optional<Question> getQuestion(@RequestParam (required=false) Long id, 
-									   	  @RequestParam (required=false) String name){
-		return questionService.findQuestion(id, name);
+									   	  @RequestParam (required=false) String description){
+		return questionService.findQuestion(id, description);
 	}
 	
 	@GetMapping("/search2")

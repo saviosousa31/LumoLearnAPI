@@ -1,7 +1,5 @@
 package com.novacoding.lumolearn_api.LumoLearn.API.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -21,27 +19,25 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 
 @Entity
-@Table(name="tb_subjects")
-public class Subject {
+@Table(name="tb_questions_options")
+public class QuestionOptions {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	@NotBlank
-	private String name;
-	@NotBlank
 	private String description;
 	@NotNull
-	private Long course_id;
+	private boolean is_correct;
+	@NotNull
+	private Long question_id;	
 	
 	@ManyToOne(fetch = FetchType.EAGER)           // EAGER para garantir que venha sempre
     @JoinColumn(
-      name = "course_id",                         // FK na tabela tb_subjects
-      referencedColumnName = "id",                // PK de tb_courses
+      name = "question_id",                        // FK na tabela tb_questions
+      referencedColumnName = "id",                 // PK de tb_questions_options
       insertable = false,                         // para não duplicar coluna
       updatable = false
-    ) 
-
-	@JsonIgnoreProperties({"author"})
-	private Course course;
+    ) 	
+	private Question question;
 }

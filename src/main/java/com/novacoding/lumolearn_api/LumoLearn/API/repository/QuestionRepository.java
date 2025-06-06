@@ -11,7 +11,7 @@ import com.novacoding.lumolearn_api.LumoLearn.API.model.Question;
 
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Long> {
-	public Optional<Question> findByName(String name);
+	public Optional<Question> findByDescription(String description);
 	
 	@Query("SELECT q FROM Question q WHERE q.subject_id = :subjectId")
 	public Iterable<Question> findBySubjectId(@Param("subjectId") Long id);

@@ -23,11 +23,11 @@ public class QuestionService {
 		return questionRepository.findAll(pageRequest);
 	}
 	
-	public Optional<Question> findQuestion(Long id, String name){
+	public Optional<Question> findQuestion(Long id, String description){
 		if(id != null && id > 0)
 			return questionRepository.findById(id);
 		else
-			return questionRepository.findByName(name);
+			return questionRepository.findByDescription(description);
 	}
 	
 	public Question saveQuestion(Question question) {
