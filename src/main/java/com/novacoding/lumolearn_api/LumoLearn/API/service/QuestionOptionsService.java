@@ -6,12 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.novacoding.lumolearn_api.LumoLearn.API.model.Question;
 import com.novacoding.lumolearn_api.LumoLearn.API.model.QuestionOptions;
 import com.novacoding.lumolearn_api.LumoLearn.API.repository.QuestionOptionsRepository;
+import com.novacoding.lumolearn_api.LumoLearn.API.repository.QuestionRepository;
 
 @Service
 public class QuestionOptionsService {
 
+	@Autowired
+	QuestionRepository questionRepository;
 	@Autowired
 	QuestionOptionsRepository questionOptionsRepository;
 	
@@ -32,6 +36,11 @@ public class QuestionOptionsService {
 	}
 	
 	public QuestionOptions saveQuestionOptions(QuestionOptions questionOptions) {
+		if (questionOptions.getQuestion() == null) {
+			Question question = questionRepository.findById(questionOptions.getQuestion_id()).orElse(null);			
+			questionOptions.setQuestion(question);
+		}
+		
 		return questionOptionsRepository.save(questionOptions);
 	}
 	

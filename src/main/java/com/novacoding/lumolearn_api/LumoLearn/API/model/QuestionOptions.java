@@ -1,7 +1,9 @@
 package com.novacoding.lumolearn_api.LumoLearn.API.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,7 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 
 @Entity
-@Table(name="tb_questions_options")
+@Table(name="tb_question_options")
 public class QuestionOptions {
 
 	@Id
@@ -28,16 +30,15 @@ public class QuestionOptions {
 	@NotBlank
 	private String description;
 	@NotNull
-	private boolean is_correct;
+	private short is_correct;
 	@NotNull
+    @Column(insertable=false, updatable=false)
 	private Long question_id;	
 	
-	@ManyToOne(fetch = FetchType.EAGER)           // EAGER para garantir que venha sempre
-    @JoinColumn(
-      name = "question_id",                        // FK na tabela tb_questions
-      referencedColumnName = "id",                 // PK de tb_questions_options
-      insertable = false,                         // para não duplicar coluna
-      updatable = false
-    ) 	
+	@ManyToOne
+    @JoinColumn(name = "question_id", referencedColumnName = "id") 	
+	@JsonBackReference
 	private Question question;
+	
+	
 }
